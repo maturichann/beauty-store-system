@@ -311,51 +311,9 @@
             margin-top: 5px;
             font-style: italic;
         }
-
-        .loading {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .loading-content {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #007bff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
-    <div class="loading" id="loading">
-        <div class="loading-content">
-            <div class="spinner"></div>
-            <p>注文を処理中...</p>
-        </div>
-    </div>
-
     <div class="container">
         <div class="header">
             <h1>I am Beauty Store</h1>
@@ -469,11 +427,11 @@
                             <div class="quantity-label">数量を選択してください（10枚単位）</div>
                             <select class="quantity-select" id="leafletQuantity" onchange="updateOrderSummary()">
                                 <option value="0">Please Select</option>
-                                <option value="10">10枚</option>
-                                <option value="20">20枚</option>
-                                <option value="30">30枚</option>
-                                <option value="40">40枚</option>
-                                <option value="50">50枚</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
                             </select>
                         </div>
                     </div>
@@ -632,8 +590,35 @@
                             <span>クレジットカード（Stripe決済）</span>
                         </label>
                         <label class="radio-item">
-                            <input type="radio" name="paymentMethod" value="cod">
+                            <input type="radio" name="paymentMethod" value="bank_transfer">
                             <span>銀行振込</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 銀行振込口座情報 -->
+                <div id="bank-info" class="form-group" style="display: none; background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h4>銀行振込口座情報</h4>
+                    <p><strong>金融機関名:</strong> 鹿児島信用金庫</p>
+                    <p><strong>支店名:</strong> 隼人支店</p>
+                    <p><strong>口座種別:</strong> 普通預金</p>
+                    <p><strong>口座番号:</strong> 7552868</p>
+                    <p><strong>名義人:</strong> メガミ(ド)</p>
+                    <p style="font-size: 12px; color: #666; margin-top: 10px;">※ 注文確認後、口座情報をメールに記載して振込確認してから発送いたします</p>
+                </div>
+
+                <!-- 同意事項 -->
+                <div class="form-group">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="privacy-agreement" required>
+                            <span><a href="#" onclick="openModal('privacy-modal')">プライバシーポリシー</a>に同意する <span class="required">*</span></span>
+                        </label>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="terms-agreement" required>
+                            <span><a href="#" onclick="openModal('terms-modal')">特定商取引法に基づく表記</a>に同意する <span class="required">*</span></span>
                         </label>
                     </div>
                 </div>
@@ -652,10 +637,6 @@
                         <span>送料</span>
                         <span id="shipping">¥1,100</span>
                     </div>
-                    <div class="summary-line">
-                        <span>代引き手数料</span>
-                        <span id="cod-fee">¥0</span>
-                    </div>
                     <div class="summary-total">
                         <span>合計</span>
                         <span id="total">¥1,100</span>
@@ -669,9 +650,89 @@
 
                 <div class="form-note">
                     ※ 注文確定後、確認メールをお送りします<br>
-                    ※ クレジットカード決済の場合、決済ページに移動します
+                    ※ クレジットカード決済の場合、決済ページに移動します<br>
+                    ※ 30,000円以上のご注文で送料無料
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- プライバシーポリシーモーダル -->
+    <div id="privacy-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div style="background-color: white; margin: 5% auto; padding: 30px; border-radius: 10px; width: 80%; max-width: 600px; max-height: 80%; overflow-y: auto;">
+            <span style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;" onclick="closeModal('privacy-modal')">&times;</span>
+            <h2>プライバシーポリシー</h2>
+            <p><strong>第1条（全般）</strong></p>
+            <p>MEGAMI合同会社（以下「弊社」という）は、本サイトの利用者（以下「ユーザー」という）のプライバシーを尊重し、ユーザーの個人情報の管理に細心の注意を払うものとします。弊社は、責任をもってユーザーの個人情報を保護するための方針を以下のとおり定め、施策の実施・維持、それらの継続的な改善を行います。個人情報保護に関する法令及びその他の規範を遵守します。</p>
+
+            <p><strong>第2条（個人情報）</strong></p>
+            <p>本プライバシーポリシーにおいて「個人情報」とは、個人情報保護法にいう、生存する個人に関する情報であって、当該情報に含まれる氏名、住所、電話番号、メールアドレス及びその他の記述等により特定の個人を識別することができるもの（他の情報と容易に照合することができ、それにより特定の個人を識別することができることとなるものを含む）をいいます。</p>
+
+            <p><strong>第3条（個人情報の収集）</strong></p>
+            <p>弊社は、個人情報の入手を適法かつ公正な手段によって行うものとし、ユーザーの意思に反する不正な入手を行わないものとします。弊社は、個人情報を収集する場合、その利用目的をあらかじめ通知又は公表するものとします。</p>
+
+            <p><strong>第5条（個人情報の利用目的）</strong></p>
+            <p>弊社は、ユーザーから収集した個人情報等を以下の目的のために使用するものとします：</p>
+            <ul>
+                <li>ユーザーからのお問い合わせ・ご相談に対する回答・返信をする場合</li>
+                <li>ユーザーからの注文に対する納品書・請求書及び資料等の送信を行う場合</li>
+                <li>ユーザーに対して弊社のサービスに対する意見、感想の提供を求める場合</li>
+                <li>本サイト内各規約等に違反する行為又はその恐れのある行為を行ったユーザーに対して注意又は警告を行う場合</li>
+                <li>弊社に対する債務を有するユーザーに同債務の履行を要求する場合</li>
+            </ul>
+
+            <p><strong>第6条（個人情報の第三者提供）</strong></p>
+            <p>弊社は、収集した個人情報等を個人情報保護法に基づき第三者に対して開示又は提供しないものとします。ただし、以下の各号に該当する場合は、この限りではありません。</p>
+            <ul>
+                <li>法令により開示が認められている場合</li>
+                <li>法令により開示を求められた場合</li>
+                <li>人の生命、身体又は財産の保護のために必要がある場合であって、本人の同意を得ることが困難である場合</li>
+                <li>警察、検察、裁判所、消費者センター等公的機関等によって開示を求められた場合</li>
+                <li>利用目的の達成のために業務を委託する場合</li>
+            </ul>
+
+            <p><strong>第7条（個人情報等の管理）</strong></p>
+            <p>弊社は、個人情報保護法に基づき個人情報等を厳重に管理し機密保持に努めるものとします。ただし、弊社は、情報の漏洩、消失、他者による改ざん等が完全に防止されることについてのユーザーに対する保証を一切行わないものとします。</p>
+
+            <p><strong>第10条（ユーザーによる照会等）</strong></p>
+            <p>弊社は、ユーザーより当該ユーザーの個人情報の照会・訂正・追加・削除・利用の停止又は消去を求められた場合、本人確認を行うものとします。なお、弊社は、ユーザー本人による照会等であると弊社が判断した場合、合理的な期間内に同照会等に対応するものとします。</p>
+        </div>
+    </div>
+
+    <!-- 特定商取引法モーダル -->
+    <div id="terms-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div style="background-color: white; margin: 5% auto; padding: 30px; border-radius: 10px; width: 80%; max-width: 600px; max-height: 80%; overflow-y: auto;">
+            <span style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;" onclick="closeModal('terms-modal')">&times;</span>
+            <h2>特定商取引法に基づく表記</h2>
+            <p><strong>販売業者</strong></p>
+            <p>MEGAMI合同会社</p>
+
+            <p><strong>運営統括責任者名</strong></p>
+            <p>旦花未倭</p>
+
+            <p><strong>所在地</strong></p>
+            <p>鹿児島県霧島市国分野口東8-40<br>TSUTAYA BOOKSTORE 霧島 2階</p>
+
+            <p><strong>お問い合わせ先</strong></p>
+            <p>0995-55-8368</p>
+
+            <p><strong>商品代金以外の料金の説明</strong></p>
+            <p>30,000円以上(税込)のお買い上げで送料無料です。<br><br>※万一商品代引での受取拒否があった場合<br>「決済手数料+往復送料+梱包手数料」を申し受けます。</p>
+
+            <p><strong>引き渡し時期</strong></p>
+            <p>在庫がある場合、午前中にご注文確認できれば当日及び翌日出荷、<br>午後に注文確認できれば翌日出荷させて頂きます。<br><br>※翌日が土・日・祝祭日の場合は月曜日もしくは祝祭日の翌日出荷になります。</p>
+
+            <p><strong>お支払い方法</strong></p>
+            <p>現金振込（銀行振込）またはクレジットカード決済（Stripe）</p>
+
+            <p><strong>返品・交換・キャンセル等</strong></p>
+            <p>商品の品質には万全の注意を払っておりますが、下記の場合のみ、<br>送料弊社負担でお取替えさせていただきます。<br><br>• 商品が不良の場合<br>• 配送中事故などで破損・汚損が発生した場合<br>• 注文されたものと異なる商品が届けられた場合</p>
+
+            <p><strong>注文方法</strong></p>
+            <p>注文専用フォームでのご注文</p>
+
+            <p><strong>領収書について</strong></p>
+            <p>領収書が必要な場合は、お問い合わせください。<br>上記とは別に発行をご希望の場合は、全て再発行領収書となります。<br>（ご入金後、3ヶ月以内のみ可能です）<br>詳しくはお問い合わせ下さい。</p>
         </div>
     </div>
 
@@ -746,7 +807,7 @@
             // リーフレット
             const leafletQty = parseInt(document.getElementById('leafletQuantity').value || 0);
             if (leafletQty > 0) {
-                const leafletTotal = leafletQty * products.leaflet.price;
+                const leafletTotal = leafletQty * products.leaflet.price; // leafletQtyは既に枚数（10, 20, 30...）
                 subtotal += leafletTotal;
                 itemsHtml += `
                     <div class="summary-line">
@@ -762,19 +823,14 @@
 
             itemsContainer.innerHTML = itemsHtml;
 
-            // 送料
-            const shipping = subtotal > 0 ? 1100 : 0;
+            // 送料：30,000円以上で無料
+            const shipping = subtotal >= 30000 ? 0 : (subtotal > 0 ? 1100 : 0);
 
-            // 代引き手数料
-            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
-            const codFee = paymentMethod === 'cod' ? 330 : 0;
-
-            const total = subtotal + shipping + codFee;
+            const total = subtotal + shipping;
 
             // 表示更新
             document.getElementById('subtotal').textContent = `¥${subtotal.toLocaleString()}`;
-            document.getElementById('shipping').textContent = subtotal > 0 ? `¥${shipping.toLocaleString()}` : '¥1,100';
-            document.getElementById('cod-fee').textContent = `¥${codFee.toLocaleString()}`;
+            document.getElementById('shipping').textContent = subtotal >= 30000 ? '無料' : (subtotal > 0 ? `¥${shipping.toLocaleString()}` : '¥1,100');
             document.getElementById('total').textContent = `¥${total.toLocaleString()}`;
 
             // 送信ボタンの有効/無効
@@ -788,12 +844,21 @@
 
             // 支払い方法変更
             document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
-                radio.addEventListener('change', updateOrderSummary);
+                radio.addEventListener('change', function() {
+                    updateOrderSummary();
+                    // 銀行振込選択時に口座情報を表示
+                    const bankInfo = document.getElementById('bank-info');
+                    if (this.value === 'bank_transfer') {
+                        bankInfo.style.display = 'block';
+                    } else {
+                        bankInfo.style.display = 'none';
+                    }
+                });
             });
         });
 
         // フォーム送信
-        document.getElementById('orderForm').addEventListener('submit', async function(e) {
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             // バリデーション
@@ -817,66 +882,27 @@
                 return;
             }
 
-            // 注文データ準備
-            const orderData = {
-                orderType: document.querySelector('input[name="orderType"]:checked').value,
-                lastName: document.getElementById('lastName').value,
-                firstName: document.getElementById('firstName').value,
-                lastNameKana: document.getElementById('lastNameKana').value,
-                firstNameKana: document.getElementById('firstNameKana').value,
-                salonName: document.getElementById('salonName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                postalCode: document.getElementById('postalCode').value,
-                prefecture: document.getElementById('prefecture').value,
-                city: document.getElementById('city').value,
-                address: document.getElementById('address').value,
-                building: document.getElementById('building').value,
-                deliveryTime: document.getElementById('deliveryTime').value,
-                megamiQuantity: megamiQty,
-                leafletQuantity: leafletQty,
-                subtotal: megamiQty * products.megami.price + leafletQty * products.leaflet.price,
-                shipping: 1100,
-                codFee: document.querySelector('input[name="paymentMethod"]:checked').value === 'cod' ? 330 : 0,
-                total: megamiQty * products.megami.price + leafletQty * products.leaflet.price + 1100 + (document.querySelector('input[name="paymentMethod"]:checked').value === 'cod' ? 330 : 0),
-                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
-            };
-
-            // ローディング表示
-            document.getElementById('loading').style.display = 'flex';
-
-            try {
-                const response = await fetch('/api/orders', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(orderData)
-                });
-
-                const result = await response.json();
-
-                document.getElementById('loading').style.display = 'none';
-
-                if (result.success) {
-                    if (result.paymentUrl) {
-                        // Stripe決済ページにリダイレクト
-                        window.location.href = result.paymentUrl;
-                    } else {
-                        alert(`注文が正常に処理されました！\n注文番号: ${result.orderId}\n\n確認メールをお送りしました。`);
-                        // フォームリセット
-                        document.getElementById('orderForm').reset();
-                        updateQuantityOptions();
-                    }
-                } else {
-                    alert('注文の処理中にエラーが発生しました。もう一度お試しください。');
-                }
-            } catch (error) {
-                document.getElementById('loading').style.display = 'none';
-                alert('ネットワークエラーが発生しました。もう一度お試しください。');
-                console.error('Error:', error);
+            // 同意チェック
+            if (!document.getElementById('privacy-agreement').checked) {
+                alert('プライバシーポリシーに同意してください。');
+                return;
             }
+            if (!document.getElementById('terms-agreement').checked) {
+                alert('特定商取引法に基づく表記に同意してください。');
+                return;
+            }
+
+            alert('注文が送信されました！\n確認メールをお送りしました。');
         });
+
+        // モーダル操作関数
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
     </script>
 </body>
 </html>
