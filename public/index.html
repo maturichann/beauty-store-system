@@ -882,18 +882,73 @@
                 return;
             }
 
-            // 同意チェック
-            if (!document.getElementById('privacy-agreement').checked) {
-                alert('プライバシーポリシーに同意してください。');
-                return;
-            }
-            if (!document.getElementById('terms-agreement').checked) {
-                alert('特定商取引法に基づく表記に同意してください。');
-                return;
-            }
+           // 同意チェック
+  if (!document.getElementById('privacy-agreement').checked) {
+      alert('プライバシーポリシーに同意してください。');
+      return;
+  }
+  if (!document.getElementById('terms-agreement').checked) {
+      alert('特定商取引法に基づく表記に同意してください。');
+      return;
+  }
 
-            alert('注文が送信されました！\n確認メールをお送りしました。');
-        });
+  // サーバーに送信
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = '処理中...';
+
+  const formData = {
+      lastName: document.getElementById('lastName').value,
+      firstName: document.getElementById('firstName').value,
+      lastNameKana: document.getElementById('lastNameKana').value,
+      firstNameKana: document.getElementById('firstNameKana').value,
+      salonName: document.getElementById('salonName').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      postalCode: document.getElementById('postalCode').value,
+      prefecture: document.getElementById('prefecture').value,
+      city: document.getElementById('city').value,
+      address: document.getElementById('address').value,
+      building: document.getElementById('building').value,
+      deliveryTime: document.getElementById('deliveryTime').value,
+      orderType: document.querySelector('input[name="orderType"]:checked').value,
+      megamiQuantity: parseInt(document.getElementById('megamiQuantity').value || 0),
+      leafletQuantity: parseInt(document.getElementById('leafletQuantity').value || 0),
+      paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+  };
+
+  try {
+      const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+          if (result.paymentUrl) {
+              // Stripe決済ページに移動
+              window.location.href = result.paymentUrl;
+          } else {
+              // 銀行振込の場合
+              alert('注文が送信されました！\n確認メールをお送りしました。');
+              document.getElementById('orderForm').reset();
+              updateQuantityOptions();
+              updateOrderSummary();
+          }
+      } else {
+          alert('エラーが発生しました。もう一度お試しください。');
+      }
+  } catch (error) {
+      console.error('Error:', error);
+      alert('エラーが発生しました。もう一度お試しください。');
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = '注文を送信する';
 
         // モーダル操作関数
         function openModal(modalId) {
