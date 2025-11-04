@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>決済キャンセル - I am Beauty Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            background: #fcf5f7;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .cancel-icon {
+            width: 80px;
+            height: 80px;
+            background: #dc3545;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .message {
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .primary-button {
+            background: #007bff;
+            color: white;
+        }
+
+        .primary-button:hover {
+            background: #0056b3;
+        }
+
+        .secondary-button {
+            background: #6c757d;
+            color: white;
+        }
+
+        .secondary-button:hover {
+            background: #545b62;
+        }
+
+        @media (max-width: 480px) {
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="cancel-icon">✕</div>
+            <h1>決済がキャンセルされました</h1>
+            <p>お支払いは完了していません</p>
+        </div>
+
+        <div class="content">
+            <div class="message">
+                決済がキャンセルされました。<br>
+                お支払いは完了していませんので、再度お手続きをお願いいたします。
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">ご注文について</div>
+                <p>
+                ・ご注文情報は一時的に保存されています<br>
+                ・決済が完了するまで商品の確保は行われません<br>
+                ・お支払い手続きを完了することで正式な注文となります
+                </p>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">お困りの場合</div>
+                <p>
+                決済でお困りの場合は、別のお支払い方法をお試しいただくか、<br>
+                お問い合わせフォームよりご連絡ください。
+                </p>
+            </div>
+
+            <div class="button-group">
+                <a href="/" class="button primary-button">注文画面に戻る</a>
+                <a href="mailto:support@example.com" class="button secondary-button">お問い合わせ</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

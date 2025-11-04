@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I am Beauty Store 発注フォーム</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            background: #fcf5f7;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #e8f4fd 0%, #d1e7dd 100%);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .form-content {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .form-control::placeholder {
+            color: #adb5bd;
+        }
+
+        .product-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .product-item {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .product-code {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .product-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .price-left {
+            color: #495057;
+        }
+
+        .price-right {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .features-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .features-list li {
+            margin-bottom: 5px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .usage-box, .warning-box {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .usage-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+        }
+
+        .warning-box {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
+        .product-spec {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .quantity-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .quantity-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .quantity-select {
+            width: 200px;
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .quantity-select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .quantity-select:hover {
+            border-color: #adb5bd;
+        }
+
+        .min-order-note {
+            font-size: 12px;
+            color: #dc3545;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .quantity-select {
+                width: 100%;
+            }
+        }
+
+        .order-summary {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 18px;
+            padding-top: 15px;
+            border-top: 2px solid #dee2e6;
+            margin-top: 15px;
+        }
+
+        .submit-button {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background: #218838;
+        }
+
+        .submit-button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-item input[type="radio"] {
+            margin: 0;
+        }
+
+        .section-divider {
+            height: 2px;
+            background: #e9ecef;
+            margin: 30px 0;
+            border-radius: 2px;
+        }
+
+        .form-note {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .order-type-note {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>注文を処理中...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>I am Beauty Store</h1>
+            <p>発注フォーム</p>
+        </div>
+
+        <div class="form-content">
+            <form id="orderForm">
+                <!-- 注文種別 -->
+                <div class="form-group">
+                    <label class="form-label">注文種別</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="orderType" value="first" checked onchange="updateQuantityOptions()">
+                            <span>初回発注</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="orderType" value="repeat" onchange="updateQuantityOptions()">
+                            <span>2回目以降</span>
+                        </label>
+                    </div>
+                    <div class="order-type-note">※ 初回発注の場合、MEGAMIパックは6個以上からの注文となります</div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- 商品選択 -->
+                <div class="product-section">
+                    <div class="product-title">商品選択</div>
+
+                    <!-- MEGAMIパック -->
+                    <div class="product-item">
+                        <div class="product-code">【MGM-001】I am MEGAMI フェイシャルパック　（消費税10%）</div>
+
+                        <div class="product-price-row">
+                            <span class="price-left">3,894円（税込）/個</span>
+                            <span class="price-right">定価：6,490円（税込）</span>
+                        </div>
+
+                        <h4>商品の特徴</h4>
+                        <ul class="features-list">
+                            <li>1ヶ月毎日ケアできる30枚入り。</li>
+                            <li>一般的な美容液16本分の液剤入り。</li>
+                            <li>天然コットン100%の日本製シートを採用。</li>
+                            <li>ヒト臍帯血由来幹細胞エクソソーム配合</li>
+                            <li>11種類のNMF(円年保湿因子)で肌を柔軟化、美容成分の浸透力を高めます。</li>
+                            <li>4種類のヒアルロン酸と7種類の天然植物エキスでしっかり保湿。</li>
+                            <li>アラントイン、ドクダミエキス、グリチルリチン酸2K、テシーツリー葉油、水溶性プロテオグリカンで肌荒れを防ぐ。</li>
+                            <li>3種類のセラミド、ホホバ種子油、スイゼンジノリ多糖体でお肌のバリア機能を高めます。</li>
+                            <li>5つのフリー処方:パラベン、着色料、シリコン、紫外線吸収剤、鉱物油。</li>
+                        </ul>
+
+                        <div class="usage-box">
+                            <strong>使用方法</strong><br>
+                            1.洗顔後、益子を丘をにぴったりと貼り付けます。<br>
+                            2.折返し部分が目に入らないように調整します。<br>
+                            3.10〜15分間のマスクタイム。その後、通常のスキンケアを行います。
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>使用上の注意</strong><br>
+                            ●お肌に異常が生じていないかよく注意してご使用ください。<br>
+                            ●お肌に合わないときは、ご使用をおやめください。<br>
+                            ●ご使用中または使用後に日光に当たって、お肌に赤み・はれ・かゆみ・刺激・色抜け(白斑等)や黒ずみ等の異常が現れた場合はご使用を中止してください。そのままご使用を続けますと、症状を悪化させることがありますので、皮膚科専門医等にご相談されることをおすすめします。<br>
+                            ●傷やはれもの、湿疹等、異常がある部分にはご使用にならないでください。<br>
+                            ●マスクの目部分を閉じてご使用になる場合は、必ずまぶたを閉じてください。<br>
+                            ●目に入らないようにご注意ください。目に入ったときは、擦らずにすぐに水で洗い流してください。異常が残るときは、眼科医にご相談されることをおすすめします。<br>
+                            ●衛生上、一度ご使用になったマスクは繰り返しご使用にならないでください。
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>保管及び取扱上の注意</strong><br>
+                            ●液漏れ・マスクの乾燥・異物の混入を防ぐため、ご使用後はチャックをきちんと閉め、チャック部を上にして保管してください。<br>
+                            ●開封後は60日以内を目安にご使用ください。<br>
+                            ●極端に高温または低温となる場所・直射日光の当たる場所を避け、涼しいところに保管してください。<br>
+                            ●乳幼児の手の届かないところに保管してください。<br>
+                            ●ご使用の際は、清潔な手でご使用ください。<br>
+                            ●マスクの口部分の抜け残りが入っていることが稀にありますが、取り除いてご使用ください。
+                        </div>
+
+                        <div class="product-spec">
+                            <strong>商品詳細</strong><br>
+                            30枚入り(液量480mL)<br>
+                            サイズ W260xD20xH225mm<br>
+                            約586g(化粧箱無し)
+                        </div>
+
+                        <div class="quantity-section">
+                            <div class="quantity-label">数量を選択してください　<span class="required">*必須</span></div>
+                            <select class="quantity-select" id="megamiQuantity" onchange="updateOrderSummary()">
+                                <option value="0">Please Select</option>
+                            </select>
+                            <div class="min-order-note" id="megami-min-note"></div>
+                        </div>
+                    </div>
+
+                    <!-- リーフレット -->
+                    <div class="product-item">
+                        <div class="product-code">【MGM-002】I am MEGAMI フェイシャルパックリーフレット　（消費税10%）</div>
+
+                        <div class="product-price-row">
+                            <span class="price-left">220円（税込）/10枚セット</span>
+                            <span class="price-right">販促物</span>
+                        </div>
+
+                        <h4>商品説明</h4>
+                        <p>I am MEGAMI フェイシャルパックの商品説明・使用方法・注意事項等が記載された販促用リーフレットです。<br>
+                        お客様への商品説明やサロンでの配布にご活用ください。</p>
+
+                        <div class="quantity-section">
+                            <div class="quantity-label">数量を選択してください（10枚単位）</div>
+                            <select class="quantity-select" id="leafletQuantity" onchange="updateOrderSummary()">
+                                <option value="0">Please Select</option>
+                                <option value="10">10枚</option>
+                                <option value="20">20枚</option>
+                                <option value="30">30枚</option>
+                                <option value="40">40枚</option>
+                                <option value="50">50枚</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- お客様情報 -->
+                <div class="form-group">
+                    <label class="form-label">お客様情報</label>
+
+                    <div class="row">
+                        <div>
+                            <label>お名前（姓）<span class="required">*</span></label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="山田" required>
+                        </div>
+                        <div>
+                            <label>お名前（名）<span class="required">*</span></label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="太郎" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <label>お名前カナ（姓）<span class="required">*</span></label>
+                            <input type="text" class="form-control" id="lastNameKana" name="lastNameKana" placeholder="ヤマダ" required>
+                        </div>
+                        <div>
+                            <label>お名前カナ（名）<span class="required">*</span></label>
+                            <input type="text" class="form-control" id="firstNameKana" name="firstNameKana" placeholder="タロウ" required>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label>サロン名/法人名<span class="required">*</span></label>
+                        <input type="text" class="form-control" id="salonName" name="salonName" placeholder="○○サロン" required>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <label>メールアドレス<span class="required">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="example@salon.com" required>
+                        </div>
+                        <div>
+                            <label>電話番号<span class="required">*</span></label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="090-1234-5678" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- 配送先情報 -->
+                <div class="form-group">
+                    <label class="form-label">配送先情報</label>
+
+                    <div class="row">
+                        <div>
+                            <label>郵便番号<span class="required">*</span></label>
+                            <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="123-4567" required>
+                        </div>
+                        <div>
+                            <label>都道府県<span class="required">*</span></label>
+                            <select class="form-control" id="prefecture" name="prefecture" required>
+                                <option value="">選択してください</option>
+                                <option value="北海道">北海道</option>
+                                <option value="青森県">青森県</option>
+                                <option value="岩手県">岩手県</option>
+                                <option value="宮城県">宮城県</option>
+                                <option value="秋田県">秋田県</option>
+                                <option value="山形県">山形県</option>
+                                <option value="福島県">福島県</option>
+                                <option value="茨城県">茨城県</option>
+                                <option value="栃木県">栃木県</option>
+                                <option value="群馬県">群馬県</option>
+                                <option value="埼玉県">埼玉県</option>
+                                <option value="千葉県">千葉県</option>
+                                <option value="東京都">東京都</option>
+                                <option value="神奈川県">神奈川県</option>
+                                <option value="新潟県">新潟県</option>
+                                <option value="富山県">富山県</option>
+                                <option value="石川県">石川県</option>
+                                <option value="福井県">福井県</option>
+                                <option value="山梨県">山梨県</option>
+                                <option value="長野県">長野県</option>
+                                <option value="岐阜県">岐阜県</option>
+                                <option value="静岡県">静岡県</option>
+                                <option value="愛知県">愛知県</option>
+                                <option value="三重県">三重県</option>
+                                <option value="滋賀県">滋賀県</option>
+                                <option value="京都府">京都府</option>
+                                <option value="大阪府">大阪府</option>
+                                <option value="兵庫県">兵庫県</option>
+                                <option value="奈良県">奈良県</option>
+                                <option value="和歌山県">和歌山県</option>
+                                <option value="鳥取県">鳥取県</option>
+                                <option value="島根県">島根県</option>
+                                <option value="岡山県">岡山県</option>
+                                <option value="広島県">広島県</option>
+                                <option value="山口県">山口県</option>
+                                <option value="徳島県">徳島県</option>
+                                <option value="香川県">香川県</option>
+                                <option value="愛媛県">愛媛県</option>
+                                <option value="高知県">高知県</option>
+                                <option value="福岡県">福岡県</option>
+                                <option value="佐賀県">佐賀県</option>
+                                <option value="長崎県">長崎県</option>
+                                <option value="熊本県">熊本県</option>
+                                <option value="大分県">大分県</option>
+                                <option value="宮崎県">宮崎県</option>
+                                <option value="鹿児島県">鹿児島県</option>
+                                <option value="沖縄県">沖縄県</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <label>市区町村<span class="required">*</span></label>
+                            <input type="text" class="form-control" id="city" name="city" placeholder="渋谷区" required>
+                        </div>
+                        <div>
+                            <label>番地<span class="required">*</span></label>
+                            <input type="text" class="form-control" id="address" name="address" placeholder="1-2-3" required>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label>建物名・部屋番号</label>
+                        <input type="text" class="form-control" id="building" name="building" placeholder="○○ビル 101号室">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label>配達希望時間帯<span class="required">*</span></label>
+                        <select class="form-control" id="deliveryTime" name="deliveryTime" required>
+                            <option value="">選択してください</option>
+                            <option value="午前中（8時〜12時）">午前中（8時〜12時）</option>
+                            <option value="12時〜14時">12時〜14時</option>
+                            <option value="14時〜16時">14時〜16時</option>
+                            <option value="16時〜18時">16時〜18時</option>
+                            <option value="18時〜20時">18時〜20時</option>
+                            <option value="20時〜21時">20時〜21時</option>
+                            <option value="時間指定なし">時間指定なし</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- 支払い方法 -->
+                <div class="form-group">
+                    <label class="form-label">お支払い方法</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="paymentMethod" value="credit_card" checked>
+                            <span>クレジットカード（Stripe決済）</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="paymentMethod" value="cod">
+                            <span>銀行振込</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- 注文サマリー -->
+                <div class="order-summary">
+                    <div class="summary-title">注文内容</div>
+                    <div id="order-items"></div>
+                    <div class="summary-line">
+                        <span>商品合計</span>
+                        <span id="subtotal">¥0</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>送料</span>
+                        <span id="shipping">¥1,100</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>代引き手数料</span>
+                        <span id="cod-fee">¥0</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>合計</span>
+                        <span id="total">¥1,100</span>
+                    </div>
+                </div>
+
+                <!-- 送信ボタン -->
+                <button type="submit" class="submit-button" id="submitBtn" disabled>
+                    注文を送信する
+                </button>
+
+                <div class="form-note">
+                    ※ 注文確定後、確認メールをお送りします<br>
+                    ※ クレジットカード決済の場合、決済ページに移動します
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 商品データ
+        const products = {
+            megami: { price: 3894, name: 'I am MEGAMI フェイシャルパック' },
+            leaflet: { price: 22, name: 'I am MEGAMI リーフレット（10枚）' }
+        };
+
+        // 数量オプション生成
+        function updateQuantityOptions() {
+            const orderType = document.querySelector('input[name="orderType"]:checked').value;
+            const select = document.getElementById('megamiQuantity');
+            const noteElement = document.getElementById('megami-min-note');
+
+            // 現在の選択値を保存
+            const currentValue = select.value;
+
+            // オプションをクリア
+            select.innerHTML = '<option value="0">Please Select</option>';
+
+            if (orderType === 'first') {
+                // 初回発注：6個以上（6〜20の連続）
+                noteElement.textContent = '※ 初回発注は6個以上からの注文となります';
+                for (let i = 6; i <= 20; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    select.appendChild(option);
+                }
+            } else {
+                // 2回目以降：1個から（1〜20の連続）
+                noteElement.textContent = '';
+                for (let i = 1; i <= 20; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    select.appendChild(option);
+                }
+            }
+
+            // 以前の値が有効なら復元
+            if (currentValue && Array.from(select.options).some(opt => opt.value === currentValue)) {
+                select.value = currentValue;
+            } else {
+                select.value = '0';
+            }
+
+            updateOrderSummary();
+        }
+
+        // 注文サマリー更新
+        function updateOrderSummary() {
+            const itemsContainer = document.getElementById('order-items');
+            let itemsHtml = '';
+            let subtotal = 0;
+
+            // MEGAMIパック
+            const megamiQty = parseInt(document.getElementById('megamiQuantity').value || 0);
+            if (megamiQty > 0) {
+                const megamiTotal = megamiQty * products.megami.price;
+                subtotal += megamiTotal;
+                itemsHtml += `
+                    <div class="summary-line">
+                        <span>${products.megami.name} × ${megamiQty}</span>
+                        <span>¥${megamiTotal.toLocaleString()}</span>
+                    </div>
+                `;
+            }
+
+            // リーフレット
+            const leafletQty = parseInt(document.getElementById('leafletQuantity').value || 0);
+            if (leafletQty > 0) {
+                const leafletTotal = leafletQty * products.leaflet.price;
+                subtotal += leafletTotal;
+                itemsHtml += `
+                    <div class="summary-line">
+                        <span>${products.leaflet.name} × ${leafletQty}枚</span>
+                        <span>¥${leafletTotal.toLocaleString()}</span>
+                    </div>
+                `;
+            }
+
+            if (itemsHtml === '') {
+                itemsHtml = '<div class="summary-line"><span>商品が選択されていません</span><span>-</span></div>';
+            }
+
+            itemsContainer.innerHTML = itemsHtml;
+
+            // 送料
+            const shipping = subtotal > 0 ? 1100 : 0;
+
+            // 代引き手数料
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+            const codFee = paymentMethod === 'cod' ? 330 : 0;
+
+            const total = subtotal + shipping + codFee;
+
+            // 表示更新
+            document.getElementById('subtotal').textContent = `¥${subtotal.toLocaleString()}`;
+            document.getElementById('shipping').textContent = subtotal > 0 ? `¥${shipping.toLocaleString()}` : '¥1,100';
+            document.getElementById('cod-fee').textContent = `¥${codFee.toLocaleString()}`;
+            document.getElementById('total').textContent = `¥${total.toLocaleString()}`;
+
+            // 送信ボタンの有効/無効
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = subtotal === 0;
+        }
+
+        // イベントリスナー設定
+        document.addEventListener('DOMContentLoaded', function() {
+            updateQuantityOptions();
+
+            // 支払い方法変更
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+                radio.addEventListener('change', updateOrderSummary);
+            });
+        });
+
+        // フォーム送信
+        document.getElementById('orderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // バリデーション
+            const requiredFields = ['lastName', 'firstName', 'lastNameKana', 'firstNameKana', 'salonName', 'email', 'phone', 'postalCode', 'prefecture', 'city', 'address', 'deliveryTime'];
+
+            for (let field of requiredFields) {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    element.focus();
+                    alert(`${element.previousElementSibling.textContent.replace('*', '')}を入力してください。`);
+                    return;
+                }
+            }
+
+            // 商品選択チェック
+            const megamiQty = parseInt(document.getElementById('megamiQuantity').value || 0);
+            const leafletQty = parseInt(document.getElementById('leafletQuantity').value || 0);
+
+            if (megamiQty === 0 && leafletQty === 0) {
+                alert('商品を1つ以上選択してください。');
+                return;
+            }
+
+            // 注文データ準備
+            const orderData = {
+                orderType: document.querySelector('input[name="orderType"]:checked').value,
+                lastName: document.getElementById('lastName').value,
+                firstName: document.getElementById('firstName').value,
+                lastNameKana: document.getElementById('lastNameKana').value,
+                firstNameKana: document.getElementById('firstNameKana').value,
+                salonName: document.getElementById('salonName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                postalCode: document.getElementById('postalCode').value,
+                prefecture: document.getElementById('prefecture').value,
+                city: document.getElementById('city').value,
+                address: document.getElementById('address').value,
+                building: document.getElementById('building').value,
+                deliveryTime: document.getElementById('deliveryTime').value,
+                megamiQuantity: megamiQty,
+                leafletQuantity: leafletQty,
+                subtotal: megamiQty * products.megami.price + leafletQty * products.leaflet.price,
+                shipping: 1100,
+                codFee: document.querySelector('input[name="paymentMethod"]:checked').value === 'cod' ? 330 : 0,
+                total: megamiQty * products.megami.price + leafletQty * products.leaflet.price + 1100 + (document.querySelector('input[name="paymentMethod"]:checked').value === 'cod' ? 330 : 0),
+                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+            };
+
+            // ローディング表示
+            document.getElementById('loading').style.display = 'flex';
+
+            try {
+                const response = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (result.success) {
+                    if (result.paymentUrl) {
+                        // Stripe決済ページにリダイレクト
+                        window.location.href = result.paymentUrl;
+                    } else {
+                        alert(`注文が正常に処理されました！\n注文番号: ${result.orderId}\n\n確認メールをお送りしました。`);
+                        // フォームリセット
+                        document.getElementById('orderForm').reset();
+                        updateQuantityOptions();
+                    }
+                } else {
+                    alert('注文の処理中にエラーが発生しました。もう一度お試しください。');
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                alert('ネットワークエラーが発生しました。もう一度お試しください。');
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

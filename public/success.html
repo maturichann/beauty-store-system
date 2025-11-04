@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>決済完了 - I am Beauty Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            background: #fcf5f7;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #28a745;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #155724;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .message {
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="success-icon">✓</div>
+            <h1>決済が完了しました</h1>
+            <p>ご注文ありがとうございます</p>
+        </div>
+
+        <div class="content">
+            <div class="message">
+                お支払いが正常に処理されました。<br>
+                ご注文の確認メールをお送りしておりますので、ご確認ください。
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">今後の流れ</div>
+                <p>
+                1. 確認メールの受信をご確認ください<br>
+                2. 商品の発送準備が整い次第、発送通知をお送りします<br>
+                3. 配送業者より配達日時のご連絡をいたします
+                </p>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">お問い合わせ</div>
+                <p>
+                ご不明な点がございましたら、お気軽にお問い合わせください。
+                </p>
+            </div>
+
+            <a href="/" class="back-button">新しい注文を作成する</a>
+        </div>
+    </div>
+
+    <script>
+        // URLパラメータからセッションIDを取得
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
+
+        if (sessionId) {
+            console.log('Stripe Session ID:', sessionId);
+            // 必要に応じてセッションIDを使用して追加処理
+        }
+    </script>
+</body>
+</html>
