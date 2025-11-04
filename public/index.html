@@ -374,7 +374,7 @@
 
                           <div class="usage-box">
                               <strong>使用方法</strong><br>
-                              1.洗顔後、益子を丘をにぴったりと貼り付けます。<br>
+                              1.洗顔後、マスクを顔にぴったりと貼り付けます。<br>
                               2.折返し部分が目に入らないように調整します。<br>
                               3.10〜15分間のマスクタイム。その後、通常のスキンケアを行います。
                           </div>
@@ -415,10 +415,10 @@
                           <div class="quantity-section">
                               <div class="quantity-label">数量を選択してください　<span 
   class="required">*必須</span></div>
-                              <select class="quantity-select" id="megamiQuantity" onchange="updateOrderSummary()">
+                              <select class="quantity-select" id="packQuantity" onchange="updateOrderSummary()">
                                   <option value="0">Please Select</option>
                               </select>
-                              <div class="min-order-note" id="megami-min-note"></div>
+                              <div class="min-order-note" id="pack-min-note"></div>
                           </div>
                       </div>
 
@@ -438,14 +438,14 @@
                           お客様への商品説明やサロンでの配布にご活用ください。</p>
 
                           <div class="quantity-section">
-                              <div class="quantity-label">数量を選択してください（10枚単位）</div>
+                              <div class="quantity-label">数量を選択してください（10枚セット単位）</div>
                               <select class="quantity-select" id="leafletQuantity" onchange="updateOrderSummary()">
                                   <option value="0">Please Select</option>
-                                  <option value="10">10</option>
-                                  <option value="20">20</option>
-                                  <option value="30">30</option>
-                                  <option value="40">40</option>
-                                  <option value="50">50</option>
+                                  <option value="1">1セット(10枚)</option>
+                                  <option value="2">2セット(20枚)</option>
+                                  <option value="3">3セット(30枚)</option>
+                                  <option value="4">4セット(40枚)</option>
+                                  <option value="5">5セット(50枚)</option>
                               </select>
                           </div>
                       </div>
@@ -794,15 +794,15 @@
       <script>
           // 商品データ
           const products = {
-              megami: { price: 3894, name: 'I am MEGAMI フェイシャルパック' },
-              leaflet: { price: 22, name: 'I am MEGAMI リーフレット（10枚）' }
+              pack: { price: 3894, name: 'I am MEGAMI フェイシャルパック' },
+              leaflet: { price: 220, name: 'I am MEGAMI リーフレット（10枚セット）' }
           };
 
           // 数量オプション生成
           function updateQuantityOptions() {
               const orderType = document.querySelector('input[name="orderType"]:checked').value;
-              const select = document.getElementById('megamiQuantity');
-              const noteElement = document.getElementById('megami-min-note');
+              const select = document.getElementById('packQuantity');
+              const noteElement = document.getElementById('pack-min-note');
 
               // 現在の選択値を保存
               const currentValue = select.value;
@@ -847,14 +847,14 @@
               let subtotal = 0;
 
               // MEGAMIパック
-              const megamiQty = parseInt(document.getElementById('megamiQuantity').value || 0);
-              if (megamiQty > 0) {
-                  const megamiTotal = megamiQty * products.megami.price;
-                  subtotal += megamiTotal;
+              const packQty = parseInt(document.getElementById('packQuantity').value || 0);
+              if (packQty > 0) {
+                  const packTotal = packQty * products.pack.price;
+                  subtotal += packTotal;
                   itemsHtml += `
                       <div class="summary-line">
-                          <span>${products.megami.name} × ${megamiQty}</span>
-                          <span>¥${megamiTotal.toLocaleString()}</span>
+                          <span>${products.pack.name} × ${packQty}</span>
+                          <span>¥${packTotal.toLocaleString()}</span>
                       </div>
                   `;
               }
@@ -866,7 +866,7 @@
                   subtotal += leafletTotal;
                   itemsHtml += `
                       <div class="summary-line">
-                          <span>${products.leaflet.name} × ${leafletQty}枚</span>
+                          <span>${products.leaflet.name} × ${leafletQty}</span>
                           <span>¥${leafletTotal.toLocaleString()}</span>
                       </div>
                   `;
@@ -940,10 +940,10 @@
               }
 
               // 商品選択チェック
-              const megamiQty = parseInt(document.getElementById('megamiQuantity').value || 0);
+              const packQty = parseInt(document.getElementById('packQuantity').value || 0);
               const leafletQty = parseInt(document.getElementById('leafletQuantity').value || 0);
 
-              if (megamiQty === 0 && leafletQty === 0) {
+              if (packQty === 0 && leafletQty === 0) {
                   alert('商品を1つ以上選択してください。');
                   return;
               }
@@ -964,23 +964,21 @@
               submitBtn.textContent = '処理中...';
 
               const formData = {
-                  lastName: document.getElementById('lastName').value,
-                  firstName: document.getElementById('firstName').value,
-                  lastNameKana: document.getElementById('lastNameKana').value,
-                  firstNameKana: document.getElementById('firstNameKana').value,
-                  salonName: document.getElementById('salonName').value,
+                  name: document.getElementById('lastName').value + ' ' +
+  document.getElementById('firstName').value,
                   email: document.getElementById('email').value,
                   phone: document.getElementById('phone').value,
-                  postalCode: document.getElementById('postalCode').value,
-                  prefecture: document.getElementById('prefecture').value,
-                  city: document.getElementById('city').value,
-                  address: document.getElementById('address').value,
-                  building: document.getElementById('building').value,
-                  deliveryTime: document.getElementById('deliveryTime').value,
-                  orderType: document.querySelector('input[name="orderType"]:checked').value,
-                  megamiQuantity: parseInt(document.getElementById('megamiQuantity').value || 0),
-                  leafletQuantity: parseInt(document.getElementById('leafletQuantity').value || 0),
-                  paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+                  address: `〒${document.getElementById('postalCode').value} ${document.getElementById('prefecture'
+  ).value}${document.getElementById('city').value}${document.getElementById('address').value} 
+  ${document.getElementById('building').value || ''}`,
+                  salonName: document.getElementById('salonName').value,
+                  products: {
+                      pack: parseInt(document.getElementById('packQuantity').value || 0),
+                      leaflet: parseInt(document.getElementById('leafletQuantity').value || 0)
+                  },
+                  payment: document.querySelector('input[name="paymentMethod"]:checked').value === 'credit_card' ?
+  'credit' : 'bank_transfer',
+                  total: parseInt(document.getElementById('total').textContent.replace(/[¥,]/g, ''))
               };
 
               try {
@@ -994,17 +992,13 @@
 
                   const result = await response.json();
 
-                  if (result.success) {
-                      if (result.paymentUrl) {
-                          // Stripe決済ページに移動
-                          window.location.href = result.paymentUrl;
-                      } else {
-                          // 銀行振込の場合
-                          alert('注文が送信されました！\n確認メールをお送りしました。');
-                          document.getElementById('orderForm').reset();
-                          updateQuantityOptions();
-                          updateOrderSummary();
-                      }
+                  if (formData.payment === 'credit' && result.url) {
+                      window.location.href = result.url;
+                  } else if (response.ok) {
+                      alert('注文を受け付けました！確認メールをお送りしました。');
+                      document.getElementById('orderForm').reset();
+                      updateQuantityOptions();
+                      updateOrderSummary();
                   } else {
                       alert('エラーが発生しました。もう一度お試しください。');
                   }
@@ -1019,3 +1013,4 @@
       </script>
   </body>
   </html>
+
