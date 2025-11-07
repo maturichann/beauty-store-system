@@ -411,11 +411,26 @@
             position: absolute;
             top: 15px;
             right: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
+            background: #f0f0f0;
+            border: 2px solid #333;
+            font-size: 28px;
             cursor: pointer;
-            color: #666;
+            color: #333;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            z-index: 1001;
+        }
+
+        .terms-close:hover {
+            background: #333;
+            color: white;
+            transform: scale(1.1);
         }
 
         .terms-text {
@@ -934,6 +949,14 @@
                 event.target.style.display = 'none';
             }
         }
+
+        // ESCキーでモーダルを閉じる
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.getElementById('tokushoModal').style.display = 'none';
+                document.getElementById('privacyModal').style.display = 'none';
+            }
+        });
 
         // 数量オプション生成
         function updateQuantityOptions() {
