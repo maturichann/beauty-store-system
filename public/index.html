@@ -1109,7 +1109,12 @@
             document.getElementById('loading').style.display = 'flex';
 
             try {
-                const response = await fetch('/api/orders', {
+                // 本番環境のAPIエンドポイントを使用
+                const apiUrl = window.location.hostname === 'localhost'
+                    ? '/api/orders'
+                    : `${window.location.origin}/api/orders`;
+
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1118,11 +1123,13 @@
                 });
 
                 const result = await response.json();
+                console.log('API Response:', result); // デバッグ用
 
                 document.getElementById('loading').style.display = 'none';
 
                 if (result.success) {
                     if (result.paymentUrl) {
+                        console.log('Redirecting to:', result.paymentUrl); // デバッグ用
                         // Stripe決済ページにリダイレクト
                         window.location.href = result.paymentUrl;
                     } else {
