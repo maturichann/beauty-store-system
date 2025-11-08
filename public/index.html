@@ -858,18 +858,24 @@
 
                 <div class="section-divider"></div>
 
-                <!-- 支払い方法 -->
+                <!-- 支払い方法（銀行振込のみ） -->
                 <div class="form-group">
                     <label class="form-label">お支払い方法</label>
                     <div class="radio-group">
+                        <!-- Stripe決済は一時的に非表示
                         <label class="radio-item">
-                            <input type="radio" name="paymentMethod" value="credit_card" checked onchange="updateOrderSummary()">
+                            <input type="radio" name="paymentMethod" value="credit_card" onchange="updateOrderSummary()">
                             <span>クレジットカード（Stripe決済）</span>
                         </label>
+                        -->
                         <label class="radio-item">
-                            <input type="radio" name="paymentMethod" value="bank_transfer" onchange="updateOrderSummary()">
+                            <input type="radio" name="paymentMethod" value="bank_transfer" checked onchange="updateOrderSummary()">
                             <span>銀行振込</span>
                         </label>
+                    </div>
+                    <div class="form-note" style="margin-top: 10px; color: #666;">
+                        ※ 現在、お支払い方法は銀行振込のみとなっております<br>
+                        ※ ご注文確定後、振込先口座情報をメールでお送りします
                     </div>
                 </div>
 
@@ -921,7 +927,7 @@
 
                 <div class="form-note">
                     ※ 注文確定後、確認メールをお送りします<br>
-                    ※ クレジットカード決済の場合、決済ページに移動します
+                    ※ 振込先口座情報をメールでご案内いたします
                 </div>
             </form>
         </div>
@@ -1125,7 +1131,7 @@
                 subtotal: subtotal,
                 shipping: shipping,
                 total: total,
-                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+                paymentMethod: 'bank_transfer' // 銀行振込のみに固定
             };
 
             // ローディング表示
