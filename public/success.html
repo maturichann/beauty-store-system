@@ -95,6 +95,51 @@
         .back-button:hover {
             background: #0056b3;
         }
+
+        /* モバイル対応 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                border-radius: 10px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .message {
+                font-size: 14px;
+            }
+
+            .success-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+        }
+
+        /* ローディング対策 */
+        .container {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -132,14 +177,45 @@
     </div>
 
     <script>
-        // URLパラメータからセッションIDを取得
-        const urlParams = new URLSearchParams(window.location.search);
-        const sessionId = urlParams.get('session_id');
+        // ページ読み込み完了時の処理
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Success page loaded');
 
-        if (sessionId) {
-            console.log('Stripe Session ID:', sessionId);
-            // 必要に応じてセッションIDを使用して追加処理
-        }
+            // URLパラメータからセッションIDを取得
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+
+            if (sessionId) {
+                console.log('Stripe Session ID:', sessionId);
+                // セッションIDがあることを表示
+                const header = document.querySelector('.header p');
+                if (header) {
+                    header.textContent = 'ご注文ありがとうございます（決済ID: ' + sessionId.slice(-8) + '）';
+                }
+            }
+
+            // エラーハンドリング
+            window.addEventListener('error', function(e) {
+                console.error('Page error:', e);
+            });
+        });
+
+        // フォールバック: ページが3秒以内に読み込まれない場合
+        setTimeout(function() {
+            const container = document.querySelector('.container');
+            if (!container || container.style.display === 'none') {
+                document.body.innerHTML = `
+                    <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+                        <h1 style="color: #28a745;">✓ 決済が完了しました</h1>
+                        <p style="margin: 20px 0;">ご注文ありがとうございます</p>
+                        <p>確認メールをお送りしております。</p>
+                        <a href="/" style="display: inline-block; background: #007bff; color: white;
+                           text-decoration: none; padding: 12px 30px; border-radius: 6px;
+                           margin-top: 20px;">新しい注文を作成する</a>
+                    </div>
+                `;
+            }
+        }, 3000);
     </script>
 </body>
 </html>
