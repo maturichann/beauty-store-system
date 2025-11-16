@@ -11,11 +11,48 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// Stripe Webhookルート（bodyParser.jsonより前に定義する必要がある）
+app.post('/webhook/stripe', express.raw({type: 'application/json'}), async (req, res) => {
+    if (!stripeClient || !process.env.STRIPE_WEBHOOK_SECRET) {
+        return res.status(400).send('Webhook not configured');
+    }
+
+    const sig = req.headers['stripe-signature'];
+    let event;
+
+    try {
+        event = stripeClient.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    } catch (err) {
+        console.error('Webhook signature verification failed:', err.message);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    if (event.type === 'checkout.session.completed') {
+        const session = event.data.object;
+        const orderId = session.metadata?.orderId;
+
+        if (orderId) {
+            console.log('Payment completed for order:', orderId);
+
+            // Google Sheetsの決済状況を更新
+            try {
+                await updatePaymentStatusInSheets(orderId, 'completed');
+                console.log('Payment status updated in sheets');
+            } catch (error) {
+                console.error('Failed to update payment status in sheets:', error);
+            }
+        } else {
+            console.log('No orderId found in session metadata');
+        }
+    }
+
+    res.json({received: true});
+});
+
+// 通常のMiddleware（Webhook以外のルートに適用）
 app.use(cors());
 app.use(express.static('public'));
 app.use(bodyParser.json());
-app.use(express.static('public'));
 
 // 初期化
 let stripeClient;
@@ -512,38 +549,7 @@ app.post('/api/orders', async (req, res) => {
     }
 });
 
-// Stripe Webhook（決済完了通知）
-app.post('/webhook/stripe', express.raw({type: 'application/json'}), async (req, res) => {
-    if (!stripeClient || !process.env.STRIPE_WEBHOOK_SECRET) {
-        return res.status(400).send('Webhook not configured');
-    }
-
-    const sig = req.headers['stripe-signature'];
-    let event;
-
-    try {
-        event = stripeClient.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-    } catch (err) {
-        console.error('Webhook signature verification failed:', err.message);
-        return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-
-    if (event.type === 'checkout.session.completed') {
-        const session = event.data.object;
-        const orderId = session.metadata.orderId;
-
-        console.log('Payment completed for order:', orderId);
-
-        // Google Sheetsの決済状況を更新
-        try {
-            await updatePaymentStatusInSheets(orderId, 'completed');
-        } catch (error) {
-            console.error('Failed to update payment status in sheets:', error);
-        }
-    }
-
-    res.json({received: true});
-});
+// Stripe Webhook処理は最初に定義済み（bodyParser.jsonより前に配置する必要があるため）
 
 // ヘルスチェック
 app.get('/api/health', (req, res) => {
